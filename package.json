@@ -11,10 +11,24 @@
     ],
     "main": "./out/extension.js",
     "contributes": {
+        "configuration": {
+            "title": "Open Any File Type in Browser",
+            "properties": {
+                "openAnyFileInBrowser.browserPath": {
+                    "type": "string",
+                    "default": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+                    "description": "The path to the browser executable."
+                }
+            }
+        },
         "commands": [
             {
                 "command": "open-any-filetype-in-browser.openInBrowser",
-                "title": "%title%"
+                "title": "%openInBrowser%"
+            },
+            {
+                "command": "open-any-filetype-in-browser.chooseBrowserPath",
+                "title": "%chooseBrowserPath%"
             }
         ],
         "menus": {

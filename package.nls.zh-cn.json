@@ -1,10 +1,4 @@
 {
-    "title": "在浏览器中打开文件路径",
-    "noFileOpen": "没有打开文件可在浏览器中打开。",
-    "onlyLocalFiles": "只能在浏览器中打开本地文件。",
-    "invalidChromePath": "无效的 Chrome 可执行文件路径，请检查路径是否存在。",
-    "selectExeFile": "请选择浏览器可执行文件。",
-    "fileOpenError": "打开文件失败：",
-    "unexpectedError": "意外错误：",
-    "openingFileInChrome": "正在 Chrome 中打开 \"{0}\"。"
+    "openInBrowser": "在浏览器中打开文件路径",
+    "chooseBrowserPath": "选择浏览器路径 (Open Any File Type in Browser)"
 }

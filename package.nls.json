@@ -1,10 +1,4 @@
 {
-    "title": "Open FilePath In Browser",
-    "noFileOpen": "No file is currently open to open in the browser.",
-    "onlyLocalFiles": "Only local files can be opened in the browser.",
-    "invalidChromePath": "Invalid Chrome executable path, please check if the path exists.",
-    "selectExeFile": "Please select the browser executable file.",
-    "fileOpenError": "Failed to open file: ",
-    "unexpectedError": "Unexpected error: ",
-    "openingFileInChrome": "Opening \"{0}\" in Chrome."
+    "openInBrowser": "Open FilePath In Browser",
+    "chooseBrowserPath": "Choose Browser Path (Open Any File Type in Browser)"
 }

@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { exec } from 'child_process';
 
-// Define a type for localization
+
 type LocalizationStrings = {
     noFileOpen: string;
     onlyLocalFiles: string;
@@ -12,10 +12,11 @@ type LocalizationStrings = {
     selectExeFile: string;
     fileOpenError: string;
     unexpectedError: string;
-    openingFileInBrowser: string; // New entry for opening file message.
+    openingFileInBrowser: string; 
+    browserPathUpdated: string; 
 };
 
-// Define the struct for the entire localization object
+
 type Localization = {
     en: LocalizationStrings;
     ["zh-cn"]: LocalizationStrings;
@@ -29,7 +30,8 @@ const localization: Localization = {
         selectExeFile: "Please select the browser executable file.",
         fileOpenError: "Failed to open file: ",
         unexpectedError: "Unexpected error: ",
-        openingFileInBrowser: `Opening "%s" in Browser.` // New entry for opening file message.
+        openingFileInBrowser: `Opening "%s" in Browser.`, 
+        browserPathUpdated: "Browser path updated to: %s", 
     },
     ["zh-cn"]: {
         noFileOpen: "没有打开文件可在浏览器中打开。",
@@ -38,7 +40,8 @@ const localization: Localization = {
         selectExeFile: "请选择浏览器可执行文件。",
         fileOpenError: "打开文件失败：",
         unexpectedError: "意外错误：",
-        openingFileInBrowser: `在 浏览器 中打开 "%s".` // New entry for opening file message.
+        openingFileInBrowser: `在 浏览器 中打开 "%s".`, 
+        browserPathUpdated: "浏览器路径已更新为：%s", 
     }
 };
 
@@ -46,10 +49,10 @@ const localization: Localization = {
  * Get localized message
  */
 function getLocalizedString(key: keyof LocalizationStrings): string {
-    const language = vscode.env.language as 'en' | 'zh-cn'; // Explicitly type to your supported languages
-    // Now TypeScript knows that language will be either 'en' or 'zh'
+    const language = vscode.env.language as 'en' | 'zh-cn'; 
     return localization[language][key] || localization['en'][key]; 
 }
+
 /**
  * 激活扩展
  */
@@ -77,29 +80,46 @@ export function activate(context: vscode.ExtensionContext) {
                 const fileName = path.basename(filePath);
                 let browserPath: string;
 
-                const defaultBrowserPath = `C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe`;
-                if (await fileExists(defaultBrowserPath)) {
-                    browserPath = defaultBrowserPath;
-                } else {
-                    const selectedFileUri = await vscode.window.showOpenDialog({
-                        canSelectFiles: true,
-                        canSelectFolders: false,
-                        canSelectMany: false,
-                        title: getLocalizedString('selectExeFile'),
-                        filters: {
-                            'Executables': ['exe']
-                        }
-                    });
+                
+                const config = vscode.workspace.getConfiguration('openAnyFileInBrowser');
+                const storedBrowserPath = config.get<string>('browserPath') || '';
 
-                    if (!selectedFileUri || selectedFileUri.length === 0) {
-                        vscode.window.showErrorMessage(getLocalizedString('selectExeFile'));
-                        return;
+                
+                if (storedBrowserPath && await fileExists(storedBrowserPath)) {
+                    browserPath = storedBrowserPath;
+                } else {
+                    
+                    const defaultBrowserPath = `C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe`;
+                    if (await fileExists(defaultBrowserPath)) {
+                        browserPath = defaultBrowserPath;
+                    } else {
+                        
+                        const selectedFileUri = await vscode.window.showOpenDialog({
+                            canSelectFiles: true,
+                            canSelectFolders: false,
+                            canSelectMany: false,
+                            title: getLocalizedString('selectExeFile'),
+                            filters: {
+                                'Executables': ['exe']
+                            }
+                        });
+
+                        if (!selectedFileUri || selectedFileUri.length === 0) {
+                            vscode.window.showErrorMessage(getLocalizedString('selectExeFile'));
+                            return;
+                        }
+                        browserPath = selectedFileUri[0].fsPath;
+                        
+                        
+                        await config.update('browserPath', browserPath, vscode.ConfigurationTarget.Global);
                     }
-                    browserPath = selectedFileUri[0].fsPath;
                 }
 
                 if (!await fileExists(browserPath)) {
-                    vscode.window.showErrorMessage(getLocalizedString('invalidBrowserPath'));
+                    const result = await vscode.window.showErrorMessage(getLocalizedString('invalidBrowserPath'), { modal: true }, 'Choose New Path');
+                    if (result === 'Choose New Path') {
+                        chooseBrowserPathCommand();
+                    }
                     return;
                 }
 
@@ -138,5 +158,30 @@ export function activate(context: vscode.ExtensionContext) {
         }
     );
 
+    
+    const chooseBrowserPathCommand = async () => {
+        const selectedFileUri = await vscode.window.showOpenDialog({
+            canSelectFiles: true,
+            canSelectFolders: false,
+            canSelectMany: false,
+            title: getLocalizedString('selectExeFile'),
+            filters: {
+                'Executables': ['exe']
+            }
+        });
+
+        if (!selectedFileUri || selectedFileUri.length === 0) {
+            vscode.window.showErrorMessage(getLocalizedString('selectExeFile'));
+            return;
+        }
+
+        const newBrowserPath = selectedFileUri[0].fsPath;
+        const config = vscode.workspace.getConfiguration('openAnyFileInBrowser');
+        await config.update('browserPath', newBrowserPath, vscode.ConfigurationTarget.Global);
+        const message = getLocalizedString('browserPathUpdated').replace('%s', newBrowserPath);
+        vscode.window.showInformationMessage(message);
+    };
+
     context.subscriptions.push(disposable);
+    context.subscriptions.push(vscode.commands.registerCommand('open-any-filetype-in-browser.chooseBrowserPath', chooseBrowserPathCommand));
 }
