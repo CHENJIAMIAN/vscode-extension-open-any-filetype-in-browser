@@ -1,0 +1,65 @@
+{
+    "name": "open-any-filetype-in-browser",
+    "displayName": "open any filetype in browser",
+    "description": "open any filetype in browser",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.95.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "open-any-filetype-in-browser.openInBrowser",
+                "title": "%title%"
+            }
+        ],
+        "menus": {
+            "explorer/context": [
+                {
+                    "command": "open-any-filetype-in-browser.openInBrowser",
+                    "group": "openInBrowser"
+                }
+            ],
+            "editor/context": [
+                {
+                    "command": "open-any-filetype-in-browser.openInBrowser",
+                    "group": "openInBrowser"
+                }
+            ]
+        },
+        "keybindings": [
+            {
+                "command": "open-any-filetype-in-browser.openInBrowser",
+                "key": "ctrl+alt+shift+o",
+                "when": "editorTextFocus || explorerViewletVisible"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "pnpm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "pnpm run compile && pnpm run lint",
+        "lint": "eslint src",
+        "test": "vscode-test"
+    },
+    "devDependencies": {
+        "@types/mocha": "^10.0.9",
+        "@types/node": "20.x",
+        "@types/vscode": "^1.95.0",
+        "@typescript-eslint/eslint-plugin": "^8.10.0",
+        "@typescript-eslint/parser": "^8.7.0",
+        "@vscode/test-cli": "^0.0.10",
+        "@vscode/test-electron": "^2.4.1",
+        "eslint": "^9.13.0",
+        "typescript": "^5.6.3"
+    },
+    "dependencies": {
+        "iconv-lite": "^0.6.3",
+        "open": "^8.4.0"
+    }
+}
