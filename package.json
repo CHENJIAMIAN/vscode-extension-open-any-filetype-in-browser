@@ -1,8 +1,11 @@
 {
     "name": "open-any-filetype-in-browser",
-    "displayName": "open any filetype in browser",
-    "description": "open any filetype in browser",
-    "version": "0.0.1",
+    "displayName": "Open Any File Type in Browser (在浏览器中打开任何文件类型)",
+    "description": "open any filetype in browser (在浏览器中打开任何文件类型)",
+    "version": "0.0.2",
+    "repository": "https://github.com/CHENJIAMIAN/vscode-extension-open-any-filetype-in-browser.git",
+    "publisher": "CHENJIAMIAN",
+    "icon": "icon.png",
     "engines": {
         "vscode": "^1.95.0"
     },
@@ -59,7 +62,7 @@
         "watch": "tsc -watch -p ./",
         "pretest": "pnpm run compile && pnpm run lint",
         "lint": "eslint src",
-        "test": "vscode-test"
+        "package": "vsce package"
     },
     "devDependencies": {
         "@types/mocha": "^10.0.9",

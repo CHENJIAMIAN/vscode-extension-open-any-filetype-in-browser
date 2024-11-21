@@ -1,66 +1,79 @@
-# open-any-filetype-in-browser
+# Open Any File Type in Browser
 
-这是“open-any-filetype-in-browser”扩展的README文件。该扩展允许用户直接在默认网页浏览器中打开任何本地文件。
+This VS Code extension allows you to open any local file in your preferred web browser directly from the editor. You can set your desired browser executable path and open files seamlessly.
 
-## 特性
+## Features
 
-- **便捷操作**: 右键单击资源管理器中的文件，或者通过命令面板来打开文件。
-- **文件兼容性**: 支持打开多种本地文件类型，包括HTML、Markdown等。
-- **用户友好的信息提示**: 在成功打开文件或发生错误时，会通过消息框向用户反馈。
+- Open any local file in a web browser.
+- Customizable browser executable path.
+- Multi-language support: English and Simplified Chinese.
 
-> 提示：许多流行的扩展使用动画效果展示功能，这是展示扩展的好方法！建议使用短小且易于理解的动画。
+## Installation
 
-## 需求
+1. Install the extension from the Visual Studio Code marketplace or clone this repository and debug it locally.
+2. Open the Command Palette (Ctrl+Shift+P) and search for `Extensions: Install Extensions`.
+3. Search for "Open Any File Type in Browser" and install it.
 
-- **Visual Studio Code**: 需要安装1.95.0或以上版本。
-- **Node.js**: 确保你的环境中已安装Node.js，以支持构建和开发流程。
+## Usage
 
-## 扩展设置
+1. Open a file in the editor.
+2. Use the command `Open Any File Type in Browser: Open In Browser` from the Command Palette (Ctrl+Shift+P).
+3. If a browser executable path is not set, you'll be prompted to select one for the first time.
+4. You can also change the browser path later using the command `Open Any File Type in Browser: Choose Browser Path`.
 
-此扩展通过`contributes.configuration`扩展点添加了以下设置：
+## Configuration
 
-- `openAnyFileTypeInBrowser.enable`: 启用/禁用此扩展。
+You can configure the default browser path in the settings:
 
-## 已知问题
+```json
+"openAnyFileInBrowser.browserPath": "C:\\Path\\To\\Your\\Browser.exe"
+```
 
-- 当前版本不支持打开网络文件，用户只能打开本地文件。
-- 在某些情况下，可能会遇到权限问题，导致无法打开文件。
+## Localization
 
-## 发布说明
+The extension supports English and Simplified Chinese. The displayed messages will change according to the set language in your VS Code configuration.
 
-用户在更新扩展时会欣赏发布说明。
+## License
 
-### 1.0.0
-
-- 初始发布，包含基本功能。
-
-### 1.0.1
-
-- 修复了打开特定文件格式时的错误。
-
-### 1.1.0
-
-- 添加了对更多文件类型的支持。
+This extension is licensed under the MIT License.
 
 ---
 
-## 遵循扩展指南
+# 在浏览器中打开任何文件类型
 
-确保您已阅读扩展指南并遵循最佳实践以创建您的扩展。
+此 VS Code 扩展允许您直接在编辑器中打开任何本地文件，使用您偏好的浏览器。您可以设置所需的浏览器可执行文件路径，轻松打开文件。
 
-- [扩展指南](https://code.visualstudio.com/api/references/extension-guidelines)
+## 特性
 
-## 使用Markdown
+- 在 web 浏览器中打开任何本地文件。
+- 可自定义的浏览器可执行文件路径。
+- 多语言支持：英语和简体中文。
 
-您可以使用Visual Studio Code撰写README。以下是一些有用的编辑器快捷键：
+## 安装
 
-- 拆分编辑器（macOS上的`Cmd+\`或Windows和Linux上的`Ctrl+\`）。
-- 切换预览（macOS上的`Shift+Cmd+V`或Windows和Linux上的`Shift+Ctrl+V`）。
-- 按`Ctrl+Space`（Windows、Linux、macOS）以查看Markdown片段列表。
+1. 从 Visual Studio Code 市场安装扩展，或克隆此存储库并在本地调试。
+2. 打开命令面板（Ctrl+Shift+P），搜索 `Extensions: Install Extensions`。
+3. 搜索 "在浏览器中打开任何文件类型" 并安装。
 
-## 更多信息
+## 使用方法
 
-- [Visual Studio Code的Markdown支持](http://code.visualstudio.com/docs/languages/markdown)
-- [Markdown语法参考](https://help.github.com/articles/markdown-basics/)
+1. 在编辑器中打开一个文件。
+2. 使用命令 `在浏览器中打开任何文件类型：在浏览器中打开` 从命令面板中执行（Ctrl+Shift+P）。
+3. 如果未设置浏览器可执行文件路径，您将在第一次运行时被提示选择一个。
+4. 您还可以稍后使用命令 `在浏览器中打开任何文件类型：选择浏览器路径` 来更改浏览器路径。
 
-**享受使用！**
+## 配置
+
+您可以在设置中配置默认的浏览器路径：
+
+```json
+"openAnyFileInBrowser.browserPath": "C:\\Path\\To\\Your\\Browser.exe"
+```
+
+## 本地化
+
+该扩展支持英语和简体中文。显示的消息将根据您在 VS Code 配置中设置的语言进行更改。
+
+## 许可证
+
+该扩展根据 MIT 许可证发布。
