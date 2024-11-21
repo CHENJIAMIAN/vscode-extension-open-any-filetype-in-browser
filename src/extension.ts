@@ -4,7 +4,6 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { exec } from 'child_process';
 
-
 type LocalizationStrings = {
     noFileOpen: string;
     onlyLocalFiles: string;
@@ -15,7 +14,6 @@ type LocalizationStrings = {
     openingFileInBrowser: string; 
     browserPathUpdated: string; 
 };
-
 
 type Localization = {
     en: LocalizationStrings;
@@ -80,27 +78,33 @@ export function activate(context: vscode.ExtensionContext) {
                 const fileName = path.basename(filePath);
                 let browserPath: string;
 
-                
                 const config = vscode.workspace.getConfiguration('openAnyFileInBrowser');
                 const storedBrowserPath = config.get<string>('browserPath') || '';
 
-                
                 if (storedBrowserPath && await fileExists(storedBrowserPath)) {
                     browserPath = storedBrowserPath;
                 } else {
-                    
-                    const defaultBrowserPath = `C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe`;
+                    let defaultBrowserPath: string=`C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe`;
+
+                    // Set default browser path based on the operating system
+                    if (process.platform === 'win32') {
+                        defaultBrowserPath = `C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe`;
+                    } else if (process.platform === 'darwin') {
+                        defaultBrowserPath = `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`;
+                    } else if (process.platform === 'linux') {
+                        defaultBrowserPath = `/usr/bin/google-chrome`;
+                    }
+
                     if (await fileExists(defaultBrowserPath)) {
                         browserPath = defaultBrowserPath;
                     } else {
-                        
                         const selectedFileUri = await vscode.window.showOpenDialog({
                             canSelectFiles: true,
                             canSelectFolders: false,
                             canSelectMany: false,
                             title: getLocalizedString('selectExeFile'),
                             filters: {
-                                'Executables': ['exe']
+                                'Executables': ['exe', 'app'] // Added 'app' for macOS
                             }
                         });
 
@@ -109,8 +113,7 @@ export function activate(context: vscode.ExtensionContext) {
                             return;
                         }
                         browserPath = selectedFileUri[0].fsPath;
-                        
-                        
+
                         await config.update('browserPath', browserPath, vscode.ConfigurationTarget.Global);
                     }
                 }
@@ -131,7 +134,14 @@ export function activate(context: vscode.ExtensionContext) {
                     });
                 }
 
-                exec(`"${browserPath}" "${filePath}"`, (error, stdout, stderr) => {
+                let execCommand = `"${browserPath}" "${filePath}"`;
+
+                // For Linux and Mac, append '&' to run the command in the background
+                if (process.platform === 'linux' || process.platform === 'darwin') {
+                    execCommand = `${execCommand} &`;
+                }
+
+                exec(execCommand, (error, stdout, stderr) => {
                     if (error) {
                         const decodedMessage = iconv.decode(Buffer.from(error.message, 'binary'), 'utf-8');
                         console.error(`Error: ${decodedMessage}`);
@@ -158,7 +168,6 @@ export function activate(context: vscode.ExtensionContext) {
         }
     );
 
-    
     const chooseBrowserPathCommand = async () => {
         const selectedFileUri = await vscode.window.showOpenDialog({
             canSelectFiles: true,
@@ -166,7 +175,7 @@ export function activate(context: vscode.ExtensionContext) {
             canSelectMany: false,
             title: getLocalizedString('selectExeFile'),
             filters: {
-                'Executables': ['exe']
+                'Executables': ['exe', 'app'] // Added 'app' for macOS
             }
         });
 

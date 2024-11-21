@@ -2,7 +2,7 @@
     "name": "open-any-filetype-in-browser",
     "displayName": "Open Any File Type in Browser (在浏览器中打开任何文件类型)",
     "description": "open any filetype in browser (在浏览器中打开任何文件类型)",
-    "version": "0.0.2",
+    "version": "1.0.1",
     "repository": "https://github.com/CHENJIAMIAN/vscode-extension-open-any-filetype-in-browser.git",
     "publisher": "CHENJIAMIAN",
     "icon": "icon.png",
@@ -19,7 +19,7 @@
             "properties": {
                 "openAnyFileInBrowser.browserPath": {
                     "type": "string",
-                    "default": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+                    "default": "",
                     "description": "The path to the browser executable."
                 }
             }
